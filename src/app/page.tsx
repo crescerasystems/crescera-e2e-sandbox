@@ -284,13 +284,13 @@ export default function Home() {
                 <div className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50 truncate mb-1">
+                      <h3 data-testid="note-title" className="text-lg font-semibold text-zinc-900 dark:text-zinc-50 truncate mb-1">
                         {note.title}
                       </h3>
                       <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-3">
                         {formatDate(note.createdAt)}
                       </p>
-                      <p className="text-zinc-700 dark:text-zinc-300 text-sm line-clamp-3">
+                      <p data-testid="note-content" className="text-zinc-700 dark:text-zinc-300 text-sm line-clamp-3">
                         {note.content}
                       </p>
                     </div>
