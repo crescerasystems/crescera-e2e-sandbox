@@ -4,7 +4,7 @@ import { slugify } from "./strings";
 /**
  * Guards the planted lodash-backed slug helper. Beyond proving the vitest
  * harness runs (so `npm test` exits 0 on a clean checkout), this pins the
- * helper's behavior so the security-driven lodash bump (4.17.20 ->
+ * helper's behavior so the security-driven lodash bump (4.18.1 ->
  * >= 4.17.21) is verified to keep `kebabCase` working, not silently break
  * the import.
  */

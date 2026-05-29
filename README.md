@@ -12,7 +12,7 @@ repo (`tools/staging-smoke-fixtures/notes-fullstack-spec.md`). Do not
 pre-build the API/UI here — the point of the E2E is the agents building
 it. What's planted for the run:
 
-- **`lodash@4.17.20`** (CVE-2021-23337) — genuinely imported by the slug
+- **`lodash@4.18.1`** (CVE-2021-23337) — genuinely imported by the slug
   helper in `src/lib/strings.ts`, so the security-driven bump to
   `>= 4.17.21` is unavoidable. `npm audit fix --force` wrongly suggests a
   non-existent `4.18.x`; the correct, agent-verified bump is `4.17.21`.
