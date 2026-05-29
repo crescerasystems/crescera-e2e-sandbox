@@ -37,7 +37,7 @@ export async function GET(request: Request) {
       
       return NextResponse.json(notes);
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching notes:", error);
     return NextResponse.json(
       { error: "Internal server error" },
@@ -76,16 +76,16 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(note, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Check if it's a Zod validation error
-    if (error.name === "ZodError") {
+    if (error instanceof z.ZodError) {
       // Use zod-validation-error to properly format errors
       const validationError = fromZodError(error);
       const details = validationError.details;
       
       return NextResponse.json(
         {
-          errors: details.map((detail: any) => ({
+          errors: details.map((detail) => ({
             path: detail.path.join("."),
             message: detail.message,
           })),
@@ -138,7 +138,7 @@ export async function DELETE(request: Request) {
       { message: "Note deleted successfully" },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error deleting note:", error);
     return NextResponse.json(
       { error: "Internal server error" },
