@@ -10,6 +10,42 @@ const CreateNoteSchema = z.object({
   content: z.string().min(1, "Content is required").max(10000, "Content must be 10,000 characters or less"),
 });
 
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
+  
+  try {
+    if (id) {
+      // GET /api/notes?id=<id> - Get single note by ID
+      const note = await prisma.note.findUnique({
+        where: { id },
+      });
+      
+      if (!note) {
+        return NextResponse.json(
+          { error: "Note not found" },
+          { status: 404 }
+        );
+      }
+      
+      return NextResponse.json(note);
+    } else {
+      // GET /api/notes - Get all notes
+      const notes = await prisma.note.findMany({
+        orderBy: { createdAt: 'desc' },
+      });
+      
+      return NextResponse.json(notes);
+    }
+  } catch (error: any) {
+    console.error("Error fetching notes:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(request: Request) {
   try {
     // Parse and validate request body

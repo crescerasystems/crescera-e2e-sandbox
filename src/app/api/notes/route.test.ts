@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { POST } from "./route";
+import { POST, GET } from "./route";
 import { prisma } from "../../../lib/prisma";
 
 describe("/api/notes POST", () => {
@@ -121,6 +121,91 @@ describe("/api/notes POST", () => {
     });
 
     const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(500);
+    expect(data.error).toBe("Internal server error");
+  });
+});
+
+describe("/api/notes GET", () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("should return list of all notes", async () => {
+    const mockNotes = [
+      {
+        id: "1",
+        title: "First Note",
+        slug: "first-note",
+        content: "Content 1",
+        userId: "user1",
+        createdAt: new Date("2026-05-29T21:58:39.659Z"),
+        updatedAt: new Date("2026-05-29T21:58:39.659Z"),
+      },
+      {
+        id: "2",
+        title: "Second Note",
+        slug: "second-note",
+        content: "Content 2",
+        userId: "user1",
+        createdAt: new Date("2026-05-29T22:00:00.000Z"),
+        updatedAt: new Date("2026-05-29T22:00:00.000Z"),
+      },
+    ];
+
+    vi.spyOn(prisma.note, "findMany").mockResolvedValue(mockNotes);
+
+    const request = new Request("http://localhost/api/notes");
+    const response = await GET(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data).toHaveLength(2);
+    expect(data[0].id).toBe("1");
+    expect(data[1].id).toBe("2");
+  });
+
+  it("should return a single note by ID", async () => {
+    const mockNote = {
+      id: "1",
+      title: "Test Note",
+      slug: "test-note",
+      content: "Test content",
+      userId: "user1",
+      createdAt: new Date("2026-05-29T21:58:39.659Z"),
+      updatedAt: new Date("2026-05-29T21:58:39.659Z"),
+    };
+
+    vi.spyOn(prisma.note, "findUnique").mockResolvedValue(mockNote);
+
+    const request = new Request("http://localhost/api/notes?id=1");
+    const response = await GET(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.id).toBe("1");
+    expect(data.title).toBe("Test Note");
+    expect(data.content).toBe("Test content");
+  });
+
+  it("should return 404 for non-existent note ID", async () => {
+    vi.spyOn(prisma.note, "findUnique").mockResolvedValue(null);
+
+    const request = new Request("http://localhost/api/notes?id=999");
+    const response = await GET(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(404);
+    expect(data.error).toBe("Note not found");
+  });
+
+  it("should return 500 for internal server error", async () => {
+    vi.spyOn(prisma.note, "findMany").mockRejectedValue(new Error("DB error"));
+
+    const request = new Request("http://localhost/api/notes");
+    const response = await GET(request);
     const data = await response.json();
 
     expect(response.status).toBe(500);
