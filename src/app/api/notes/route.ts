@@ -7,7 +7,7 @@ import { fromZodError } from "zod-validation-error";
 // Request body validation schema
 const CreateNoteSchema = z.object({
   title: z.string().min(1, "Title is required").max(100, "Title must be 100 characters or less"),
-  content: z.string().min(1, "Content is required").max(10000, "Content must be 10,000 characters or less"),
+  body: z.string().min(1, "Content is required").max(10000, "Content must be 10,000 characters or less"),
 });
 
 export async function GET(request: Request) {
@@ -68,7 +68,7 @@ export async function POST(request: Request) {
       data: {
         title: validatedData.title,
         slug: uniqueSlug,
-        content: validatedData.content,
+        body: validatedData.body,
         // In a real app, you'd get userId from session
         // For now, we'll use a placeholder
         userId: "placeholder-user-id",
