@@ -102,3 +102,47 @@ export async function POST(request: Request) {
     );
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    // Extract ID from URL path
+    const url = new URL(request.url);
+    const pathParts = url.pathname.split('/');
+    const id = pathParts[pathParts.length - 1];
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: "Note ID is required" },
+        { status: 400 }
+      );
+    }
+    
+    // Check if note exists first
+    const existingNote = await prisma.note.findUnique({
+      where: { id },
+    });
+    
+    if (!existingNote) {
+      return NextResponse.json(
+        { error: "Note not found" },
+        { status: 404 }
+      );
+    }
+    
+    // Delete the note
+    await prisma.note.delete({
+      where: { id },
+    });
+    
+    return NextResponse.json(
+      { message: "Note deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error("Error deleting note:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { POST, GET } from "./route";
+import { POST, GET, DELETE } from "./route";
 import { prisma } from "../../../lib/prisma";
 
 describe("/api/notes POST", () => {
@@ -206,6 +206,77 @@ describe("/api/notes GET", () => {
 
     const request = new Request("http://localhost/api/notes");
     const response = await GET(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(500);
+    expect(data.error).toBe("Internal server error");
+  });
+});
+
+describe("/api/notes DELETE", () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("should delete a note successfully", async () => {
+    const mockNote = {
+      id: "test-id",
+      title: "Test Note",
+      slug: "test-note",
+      content: "Test content",
+      userId: "user1",
+      createdAt: new Date("2026-05-29T21:58:39.659Z"),
+      updatedAt: new Date("2026-05-29T21:58:39.659Z"),
+    };
+
+    vi.spyOn(prisma.note, "findUnique").mockResolvedValue(mockNote);
+    vi.spyOn(prisma.note, "delete").mockResolvedValue(mockNote);
+
+    const request = new Request("http://localhost/api/notes/test-id", {
+      method: "DELETE",
+    });
+
+    const response = await DELETE(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.message).toBe("Note deleted successfully");
+  });
+
+  it("should return 404 for non-existent note ID", async () => {
+    vi.spyOn(prisma.note, "findUnique").mockResolvedValue(null);
+
+    const request = new Request("http://localhost/api/notes/999", {
+      method: "DELETE",
+    });
+
+    const response = await DELETE(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(404);
+    expect(data.error).toBe("Note not found");
+  });
+
+  it("should return 400 for missing ID", async () => {
+    const request = new Request("http://localhost/api/notes/", {
+      method: "DELETE",
+    });
+
+    const response = await DELETE(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(data.error).toBe("Note ID is required");
+  });
+
+  it("should return 500 for internal server error", async () => {
+    vi.spyOn(prisma.note, "findUnique").mockRejectedValue(new Error("DB error"));
+
+    const request = new Request("http://localhost/api/notes/test-id", {
+      method: "DELETE",
+    });
+
+    const response = await DELETE(request);
     const data = await response.json();
 
     expect(response.status).toBe(500);
