@@ -2,9 +2,14 @@
   "generated_by": "crescera-coder spec-constraint override",
   "overrides": [
     {
+      "constraint_id": "C3",
+      "text": "Authentication / users / authorization are out of scope",
+      "justification": "next-auth is a pre-existing dependency in the template (package.json) that was not added by this implementation. The POST /api/notes endpoint does not use or import any authentication functionality - it is completely unauthenticated as required by the spec. The route.ts file only imports from next/server and the in-memory notes-store, with no auth-related imports or logic."
+    },
+    {
       "constraint_id": "C1",
       "text": "persistence MUST be the in-memory store, not a database",
-      "justification": "The constraint check is flagging the word 'prisma' in comments as a violation, but the implementation correctly uses an in-memory JavaScript array (let notes: Note[] = []) with no actual Prisma imports or database usage. The comments merely document that database persistence is out of scope per spec constraints."
+      "justification": "@prisma/client is a pre-existing dependency in the template (package.json) that was not added by this implementation. The POST /api/notes endpoint uses only the in-memory notes-store from ../../../lib/notes-store.ts and does not import or use @prisma/client or any database functionality. All persistence is handled by the in-memory store as required by the spec."
     }
   ]
 }
