@@ -12,7 +12,7 @@ describe("/api/notes POST", () => {
       id: "test-id",
       title: "Test Note",
       slug: "test-note",
-      content: "Test content",
+      body: "Test content",
       userId: "placeholder-user-id",
       createdAt: new Date("2026-05-29T21:58:39.659Z"),
       updatedAt: new Date("2026-05-29T21:58:39.659Z"),
@@ -24,7 +24,7 @@ describe("/api/notes POST", () => {
     const request = new Request("http://localhost/api/notes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "Test Note", content: "Test content" }),
+      body: JSON.stringify({ title: "Test Note", body: "Test content" }),
     });
 
     const response = await POST(request);
@@ -34,7 +34,7 @@ describe("/api/notes POST", () => {
     expect(data.id).toBe(mockNote.id);
     expect(data.title).toBe(mockNote.title);
     expect(data.slug).toBe(mockNote.slug);
-    expect(data.content).toBe(mockNote.content);
+    expect(data.body).toBe(mockNote.body);
     expect(data.userId).toBe(mockNote.userId);
     // Dates are serialized to strings in JSON
     expect(new Date(data.createdAt)).toEqual(mockNote.createdAt);
@@ -45,7 +45,7 @@ describe("/api/notes POST", () => {
     const request = new Request("http://localhost/api/notes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: "Test content" }),
+      body: JSON.stringify({ body: "Test content" }),
     });
 
     const response = await POST(request);
@@ -56,7 +56,7 @@ describe("/api/notes POST", () => {
     expect(data.errors[0].path).toBe("title");
   });
 
-  it("should return 400 for invalid data - missing content", async () => {
+  it("should return 400 for invalid data - missing body", async () => {
     const request = new Request("http://localhost/api/notes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -68,7 +68,7 @@ describe("/api/notes POST", () => {
 
     expect(response.status).toBe(400);
     expect(data.errors).toHaveLength(1);
-    expect(data.errors[0].path).toBe("content");
+    expect(data.errors[0].path).toBe("body");
   });
 
   it("should generate unique slug when duplicate exists", async () => {
@@ -76,7 +76,7 @@ describe("/api/notes POST", () => {
       id: "1",
       title: "Test",
       slug: "test-note",
-      content: "",
+      body: "",
       userId: "user1",
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -90,7 +90,7 @@ describe("/api/notes POST", () => {
       id: "test-id",
       title: "Test Note",
       slug: "test-note-1",
-      content: "Test content",
+      body: "Test content",
       userId: "placeholder-user-id",
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -101,7 +101,7 @@ describe("/api/notes POST", () => {
     const request = new Request("http://localhost/api/notes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "Test Note", content: "Test content" }),
+      body: JSON.stringify({ title: "Test Note", body: "Test content" }),
     });
 
     const response = await POST(request);
@@ -117,7 +117,7 @@ describe("/api/notes POST", () => {
     const request = new Request("http://localhost/api/notes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "Test Note", content: "Test content" }),
+      body: JSON.stringify({ title: "Test Note", body: "Test content" }),
     });
 
     const response = await POST(request);
@@ -139,7 +139,7 @@ describe("/api/notes GET", () => {
         id: "1",
         title: "First Note",
         slug: "first-note",
-        content: "Content 1",
+        body: "Content 1",
         userId: "user1",
         createdAt: new Date("2026-05-29T21:58:39.659Z"),
         updatedAt: new Date("2026-05-29T21:58:39.659Z"),
@@ -148,7 +148,7 @@ describe("/api/notes GET", () => {
         id: "2",
         title: "Second Note",
         slug: "second-note",
-        content: "Content 2",
+        body: "Content 2",
         userId: "user1",
         createdAt: new Date("2026-05-29T22:00:00.000Z"),
         updatedAt: new Date("2026-05-29T22:00:00.000Z"),
@@ -172,7 +172,7 @@ describe("/api/notes GET", () => {
       id: "1",
       title: "Test Note",
       slug: "test-note",
-      content: "Test content",
+      body: "Test content",
       userId: "user1",
       createdAt: new Date("2026-05-29T21:58:39.659Z"),
       updatedAt: new Date("2026-05-29T21:58:39.659Z"),
@@ -187,7 +187,7 @@ describe("/api/notes GET", () => {
     expect(response.status).toBe(200);
     expect(data.id).toBe("1");
     expect(data.title).toBe("Test Note");
-    expect(data.content).toBe("Test content");
+    expect(data.body).toBe("Test content");
   });
 
   it("should return 404 for non-existent note ID", async () => {
@@ -223,7 +223,7 @@ describe("/api/notes DELETE", () => {
       id: "test-id",
       title: "Test Note",
       slug: "test-note",
-      content: "Test content",
+      body: "Test content",
       userId: "user1",
       createdAt: new Date("2026-05-29T21:58:39.659Z"),
       updatedAt: new Date("2026-05-29T21:58:39.659Z"),
