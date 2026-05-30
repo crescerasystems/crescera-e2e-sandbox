@@ -4,12 +4,12 @@
     {
       "constraint_id": "C1",
       "text": "persistence MUST be the in-memory store, not a database",
-      "justification": "The @prisma/client dependency exists in package.json as part of the repository template, but the notes-store implementation uses only in-memory Map storage and does not import or use @prisma/client anywhere. The implementation satisfies the constraint by using pure in-memory storage without any database persistence."
+      "justification": "The @prisma/client dependency exists in the repository template but is not used by the slug implementation. The slug function only uses lodash/kebabCase for in-memory string processing, satisfying the constraint that persistence must be in-memory."
     },
     {
       "constraint_id": "C3",
       "text": "Authentication / users / authorization are out of scope",
-      "justification": "The next-auth dependency exists in package.json as part of the repository template, but the notes-store implementation does not import or use next-auth, auth0, or firebase anywhere. The implementation satisfies the constraint by being completely independent of authentication systems."
+      "justification": "The next-auth dependency exists in the repository template but is not used by the slug implementation. The slug function is a pure string utility that doesn't involve any authentication, authorization, or user-related functionality."
     }
   ]
 }
