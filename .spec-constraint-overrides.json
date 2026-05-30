@@ -1,0 +1,10 @@
+{
+  "generated_by": "crescera-coder spec-constraint override",
+  "overrides": [
+    {
+      "constraint_id": "C1",
+      "text": "persistence MUST be the in-memory store, not a database",
+      "justification": "The constraint check is flagging the word 'prisma' in comments as a violation, but the implementation correctly uses an in-memory JavaScript array (let notes: Note[] = []) with no actual Prisma imports or database usage. The comments merely document that database persistence is out of scope per spec constraints."
+    }
+  ]
+}
