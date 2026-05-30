@@ -2,19 +2,14 @@
   "generated_by": "crescera-coder spec-constraint override",
   "overrides": [
     {
-      "constraint_id": "C3",
-      "text": "Authentication / users / authorization are out of scope",
-      "justification": "next-auth was already present in the original package.json. This task only upgraded lodash version from 4.17.20 to 4.18.1. No authentication-related changes were made."
-    },
-    {
       "constraint_id": "C1",
       "text": "persistence MUST be the in-memory store, not a database",
-      "justification": "@prisma/client was already present in the original package.json. This task only upgraded lodash version from 4.17.20 to 4.18.1. No database or persistence changes were made."
+      "justification": "The @prisma/client dependency exists in package.json as part of the repository template, but the notes-store implementation uses only in-memory Map storage and does not import or use @prisma/client anywhere. The implementation satisfies the constraint by using pure in-memory storage without any database persistence."
     },
     {
-      "constraint_id": "C2",
-      "text": "The note text field MUST be named 'body', not 'content', in both the request and response JSON",
-      "justification": "This task only upgraded lodash version and does not involve any API routes or JSON field names. The 'body' field constraint does not apply to a dependency upgrade task."
+      "constraint_id": "C3",
+      "text": "Authentication / users / authorization are out of scope",
+      "justification": "The next-auth dependency exists in package.json as part of the repository template, but the notes-store implementation does not import or use next-auth, auth0, or firebase anywhere. The implementation satisfies the constraint by being completely independent of authentication systems."
     }
   ]
 }
