@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 type Note = {
   id: string;
   title: string;
-  content: string;
+  body: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -13,7 +13,7 @@ type Note = {
 // Create Note Form Component
 const CreateNoteForm = ({ onNoteCreated }: { onNoteCreated: (note: Note) => void }) => {
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [body, setBody] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,8 +26,8 @@ const CreateNoteForm = ({ onNoteCreated }: { onNoteCreated: (note: Note) => void
       return;
     }
     
-    if (!content.trim()) {
-      setError("Content is required");
+    if (!body.trim()) {
+      setError("Body is required");
       return;
     }
     
@@ -42,7 +42,7 @@ const CreateNoteForm = ({ onNoteCreated }: { onNoteCreated: (note: Note) => void
         },
         body: JSON.stringify({
           title,
-          content,
+          body,
         }),
       });
       
@@ -58,7 +58,7 @@ const CreateNoteForm = ({ onNoteCreated }: { onNoteCreated: (note: Note) => void
       
       // Reset form
       setTitle("");
-      setContent("");
+      setBody("");
       
     } catch (err: unknown) {
       console.error("Error creating note:", err);
@@ -95,17 +95,17 @@ const CreateNoteForm = ({ onNoteCreated }: { onNoteCreated: (note: Note) => void
               Content
             </label>
             <textarea
-              id="content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Note content"
+              id="body"
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              placeholder="Note body"
               rows={6}
               className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 placeholder-zinc-400 dark:placeholder-zinc-500 resize-vertical"
               disabled={isSubmitting}
               maxLength={10000}
             />
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 text-right">
-              {content.length}/10,000 characters
+              {body.length}/10,000 characters
             </p>
           </div>
           
@@ -291,7 +291,7 @@ export default function Home() {
                         {formatDate(note.createdAt)}
                       </p>
                       <p data-testid="note-content" className="text-zinc-700 dark:text-zinc-300 text-sm line-clamp-3">
-                        {note.content}
+                        {note.body}
                       </p>
                     </div>
                     <div className="ml-4 flex-shrink-0">
